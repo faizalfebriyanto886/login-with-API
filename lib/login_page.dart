@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:login_by_php/home_page.dart';
+import 'package:login_by_php/register_page.dart';
 import 'package:lottie/lottie.dart';
 
 class Login extends StatefulWidget {
@@ -79,7 +80,30 @@ class _LoginState extends State<Login> {
                         )
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 5),
+                    Row(
+                      children: [
+                        const Text(
+                          'Apakah anda sudah punya akun ?',
+                          style: TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const Register()));
+                          },
+                          child: Text(
+                            'Daftarkan',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue[400]
+                            ),
+                          )
+                        )
+                      ],
+                    ),
                     Container(
                       padding: const EdgeInsets.all(5),
                       width: MediaQuery.of(context).size.width * 0.7,
