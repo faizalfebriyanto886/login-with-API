@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:login_by_php/home_page.dart';
 import 'package:login_by_php/register_page.dart';
@@ -15,24 +14,6 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  dynamic data;
-
-  Future<dynamic> getData() async {
-    final DocumentReference dataLogin = FirebaseFirestore.instance.collection('login').where('email', isEqualTo: _emailController).snapshots() as DocumentReference<Object?>;
-
-    await dataLogin.get().then<dynamic>((DocumentSnapshot snapshot) {
-      setState(() {
-        data = snapshot.data();
-      });
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getData();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +34,7 @@ class _LoginState extends State<Login> {
           ),
           SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.only(top: 450),
+              padding: const EdgeInsets.only(top: 400),
               child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
@@ -93,12 +74,12 @@ class _LoginState extends State<Login> {
                           onPressed: (){
                             Navigator.push(context, MaterialPageRoute(builder: (context) => const Register()));
                           },
-                          child: Text(
+                          child: const Text(
                             'Daftarkan',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
-                              color: Colors.blue[400]
+                              color: Color(0xFF455A63)
                             ),
                           )
                         )
@@ -107,22 +88,21 @@ class _LoginState extends State<Login> {
                     Container(
                       padding: const EdgeInsets.all(5),
                       width: MediaQuery.of(context).size.width * 0.7,
-                      child:  ElevatedButton(
+                      child: ElevatedButton(
                         onPressed: () {
-                          if (data['email'] != null && data['password'] != null) {
-                            _emailController.text = data['email'] ?? '';
-                            _passwordController.text = data['password'] ?? '';
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
-                          } else  {
-                            CoolAlert.show(
-                              context: context,
-                              type: CoolAlertType.info,
-                              text: 'Silahkan cek email dan password !!'
-                            );
-                          }
+                          FirebaseFirestore.instance.collection('login').get().then((querySnapshot) {
+                            // ignore: avoid_function_literals_in_foreach_calls
+                            querySnapshot.docs.forEach((doc) {
+                              if (_emailController.text == doc.data()['email'] && _passwordController.text == doc.data()['password']) {
+                                _emailController.text = doc.data()['email'];
+                                _passwordController.text = doc.data()['password'];
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => Home(nama: doc.data()['nama'] ?? '', npm: doc.data()['npm'] ?? '')));
+                              }
+                            });
+                          });
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.blue,
+                          primary: const Color(0xFF455A63),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0)
                           ),
