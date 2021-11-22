@@ -89,8 +89,8 @@ class _LoginState extends State<Login> {
                       padding: const EdgeInsets.all(5),
                       width: MediaQuery.of(context).size.width * 0.7,
                       child: ElevatedButton(
-                        onPressed: () {
-                          FirebaseFirestore.instance.collection('login').get().then((querySnapshot) {
+                        onPressed: () async {
+                          await FirebaseFirestore.instance.collection('login').get().then((querySnapshot) {
                             // ignore: avoid_function_literals_in_foreach_calls
                             querySnapshot.docs.forEach((doc) {
                               if (_emailController.text == doc.data()['email'] && _passwordController.text == doc.data()['password']) {

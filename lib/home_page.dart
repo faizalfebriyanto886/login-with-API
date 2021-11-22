@@ -29,10 +29,7 @@ class Home extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Lottie.network(
-                'https://assets6.lottiefiles.com/packages/lf20_toc5zbpc.json',
-                width: 200,
-              ),
+              Lottie.asset('assets/images/58598-humans.json', width: 250),
               Card(
                 color: const Color(0xFFC8C8C8),
                 shape: RoundedRectangleBorder(
